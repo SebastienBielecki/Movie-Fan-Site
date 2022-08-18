@@ -3,12 +3,28 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+// PASPORT FILES ///
+const passport = require("passport");
+const GitHubStrategy = require("passport-github").Strategy;
+
+// END OF PASSPORT FILES //
 
 var indexRouter = require('./routes/index');
 
 var app = express();
 // const helmet = require("helmet");
 // app.use(helmet());
+
+
+/////////// PASSPORT CONFIG //////////////
+const passportConfig = require("./config");
+passport.use(new GitHubStrategy(passportConfig,
+function(accessToken, refreshToken, profile, cb) {
+    console.log(profile);
+  }
+));
+
+/////////// PASSPORT CONFIG //////////////
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

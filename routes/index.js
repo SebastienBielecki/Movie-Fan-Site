@@ -2,6 +2,9 @@ var express = require('express');
 const { permittedCrossDomainPolicies } = require('helmet');
 var router = express.Router();
 const request = require("request");
+const passport = require("passport");
+
+
 
 const apiKey = "1fb720b97cc13e580c2c35e1138f90f8";
 const apiBaseUrl = 'http://api.themoviedb.org/3';
@@ -27,6 +30,9 @@ router.get('/', function(req, res, next) {
     })
   })
 });
+
+router.get("/login", passport.authenticate("github"));
+
 
 router.get("/movie/:id", (req, res, next) => {
   const movieId = req.params.id;
