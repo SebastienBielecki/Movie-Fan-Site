@@ -18,13 +18,10 @@ router.use((req, res, next)=> {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  console.log(req.user);
   request.get(nowPlayingUrl, (error, response, movieData) => {
-    // console.log("=========== The error ===========");
-    // console.log(error);
-    // console.log("=========== The response ===========");
-    // console.log(response);
     const parsedData = JSON.parse(movieData);
-    console.log(parsedData);
+    //console.log(parsedData);
     res.render("index", { 
       parsedData: parsedData.results,
     })
@@ -32,6 +29,15 @@ router.get('/', function(req, res, next) {
 });
 
 router.get("/login", passport.authenticate("github"));
+
+router.get("/favorites", (req, res) => {
+  res.json(req.user.displayName);
+})
+
+router.get("/auth", passport.authenticate("github", {
+  successRedirect: "/",
+  failureRedirect: "./loginFailed"
+}))
 
 
 router.get("/movie/:id", (req, res, next) => {

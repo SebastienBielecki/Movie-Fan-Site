@@ -3,7 +3,11 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+
+
+
 // PASPORT FILES ///
+const session = require("express-session");
 const passport = require("passport");
 const GitHubStrategy = require("passport-github").Strategy;
 
@@ -17,12 +21,31 @@ var app = express();
 
 
 /////////// PASSPORT CONFIG //////////////
+app.use(session({
+  secret: "Ay ay aya canta y no llores",
+  resave: false,
+  saveUninitialized: true,
+}))
+
+
+
+app.use(passport.initialize());
+app.use(passport.session());
 const passportConfig = require("./config");
 passport.use(new GitHubStrategy(passportConfig,
 function(accessToken, refreshToken, profile, cb) {
-    console.log(profile);
+    //console.log(profile);
+    return cb(null, profile);
   }
 ));
+
+passport.serializeUser((user, cb) => {
+  cb(null, user);
+})
+
+passport.deserializeUser((user, cb) => {
+  cb(null, user);
+})
 
 /////////// PASSPORT CONFIG //////////////
 
